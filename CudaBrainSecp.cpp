@@ -6,7 +6,7 @@
 #include <cassert>
 #include <pthread.h>
 #include <fstream>
-#include "GPU/GPUSecp.h"
+// #include "GPU/GPUSecp.h"
 #include "CPU/SECP256k1.h"
 #include "CPU/HashMerge.cpp"
 #include "CPU/Combo.cpp"
