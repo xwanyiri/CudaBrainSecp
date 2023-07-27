@@ -54,6 +54,47 @@ void Secp256K1::Init() {
 
 }
 
+std::vector<unsigned char> Secp256K1::getPub(Int *privKey) {
+
+  int i;
+  uint16_t shorty;
+  Point Q;
+  Q.Clear();
+
+  for (i = 0; i < NUM_GTABLE_CHUNK; i++) {
+    shorty = privKey->GetShort(i);
+    if(shorty > 0) {
+
+      int element = (i * NUM_GTABLE_VALUE) + (shorty-1);
+      Q = GTable[element];
+
+      i++;
+      break;
+    }
+  }
+
+  for(; i < NUM_GTABLE_CHUNK; i++) {
+    shorty = privKey->GetShort(i);
+    
+    if(shorty > 0) {
+
+      int element = (i * NUM_GTABLE_VALUE) + (shorty-1);
+      Point p2 = GTable[element];
+
+      Q = Add2(Q, p2);
+    }
+  }
+
+  Q.Reduce();
+
+  // Compress the Q point
+  std::vector<unsigned char> result(33);
+  result[0] = Q.y.IsEven() ? 0x02 : 0x03;
+  std::vector<unsigned char> xBytes = Q.x.ToBytes();
+  std::copy(xBytes.begin(), xBytes.end(), result.begin() + 1);
+
+  return result;
+}
 
 Point Secp256K1::ComputePublicKey(Int *privKey) {
 

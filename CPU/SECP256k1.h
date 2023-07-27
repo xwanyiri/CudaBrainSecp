@@ -38,6 +38,7 @@ public:
   ~Secp256K1();
   void Init();
   Point ComputePublicKey(Int *privKey);
+  std::vector<unsigned char> getPub(Int *privKey);
   Point NextKey(Point &key);
   bool  EC(Point &p);
 
